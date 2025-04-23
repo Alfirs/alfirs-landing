@@ -71,7 +71,6 @@ particlesJS("particles-js", {
 // Валидация формы
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
-const emailInput = document.getElementById("email");
 
 nameInput.addEventListener("input", () => {
     nameInput.value = nameInput.value.replace(/[^a-zA-Zа-яА-Я\s]/g, "");
@@ -87,7 +86,6 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
     const form = e.target;
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
-    const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
 
     if (!name || !phone) {
@@ -95,23 +93,20 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
         return;
     }
 
-    const formData = {
-        name: name,
-        phone: phone,
-        _replyto: email,
-        message: message,
-        bonus: "1 месяц сопровождения бесплатно"
-    };
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("message", message);
+    formData.append("bonus", "1 месяц сопровождения бесплатно");
 
     try {
-        console.log("Отправка заявки на почту...", formData);
+        console.log("Отправка заявки на почту...", { name, phone, message });
         const response = await fetch(form.action, {
             method: "POST",
+            body: formData,
             headers: {
-                "Content-Type": "application/json",
                 "Accept": "application/json"
-            },
-            body: JSON.stringify(formData)
+            }
         });
 
         if (response.ok) {
@@ -119,12 +114,12 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
             alert("Заявка отправлена! Скоро свяжемся.");
             form.reset();
         } else {
-            const errorData = await response.json();
-            console.error("Ошибка:", errorData);
-            throw new Error(`Ошибка: ${errorData.error || response.statusText}`);
+            const errorText = await response.text();
+            console.error("Ошибка:", errorText);
+            throw new Error(`Ошибка ${response.status}: ${errorText}`);
         }
     } catch (error) {
         console.error("Ошибка:", error.message);
-        alert("Ошибка отправки. Проверьте Formspree или попробуйте позже.");
+        alert("Ошибка отправки. Проверьте Formspree ID или попробуйте позже.");
     }
 });
