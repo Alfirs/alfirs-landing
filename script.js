@@ -71,6 +71,7 @@ particlesJS("particles-js", {
 // Валидация формы
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
+const emailInput = document.getElementById("email");
 
 nameInput.addEventListener("input", () => {
     nameInput.value = nameInput.value.replace(/[^a-zA-Zа-яА-Я\s]/g, "");
@@ -86,6 +87,7 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
     const form = e.target;
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
 
     if (!name || !phone) {
@@ -93,21 +95,25 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
         return;
     }
 
+    const formData = {
+        name: name,
+        phone: phone,
+        _replyto: email,
+        message: message,
+        bonus: "1 месяц сопровождения бесплатно"
+    };
+
     try {
-        console.log("Отправка заявки на почту...", { name, phone, message });
+        console.log("Отправка заявки на почту...", formData);
         const response = await fetch(form.action, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({
-                name: name,
-                phone: phone,
-                message: message,
-                bonus: "1 месяц сопровождения бесплатно"
-            })
+            body: JSON.stringify(formData)
         });
+
         if (response.ok) {
             console.log("Заявка отправлена на почту!");
             alert("Заявка отправлена! Скоро свяжемся.");
@@ -119,6 +125,6 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
         }
     } catch (error) {
         console.error("Ошибка:", error.message);
-        alert("Ошибка отправки. Попробуйте позже.");
+        alert("Ошибка отправки. Проверьте Formspree или попробуйте позже.");
     }
 });
