@@ -84,13 +84,14 @@
         <div class="container">
             <h2>Оставить заявку</h2>
             <p class="apply-promo">Оставьте заявку через сайт и получите <strong>1 месяц сопровождения бота бесплатно</strong>!</p>
-            <form id="contact-form">
+            <form id="contact-form" action="https://formspree.io/f/xblojzlg" method="POST">
                 <label for="name">Ваше имя</label>
-                <input type="text" id="name" required>
+                <input type="text" id="name" name="name" required>
                 <label for="phone">Ваш номер телефона</label>
-                <input type="tel" id="phone" required pattern="[0-9+\-\(\)\s]{10,15}" placeholder="+7 (999) 123-45-67">
+                <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\(\)\s]{10,15}" placeholder="+7 (999) 123-45-67">
                 <label for="message">Сообщение</label>
-                <textarea id="message" required></textarea>
+                <textarea id="message" name="message" required></textarea>
+                <input type="hidden" name="bonus" value="1 месяц сопровождения бесплатно">
                 <button type="submit" class="cta-btn">Отправить</button>
             </form>
         </div>

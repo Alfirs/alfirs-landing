@@ -68,39 +68,57 @@ particlesJS("particles-js", {
     }
 });
 
-// Отправка формы в Telegram
+// Валидация формы
+const nameInput = document.getElementById("name");
+const phoneInput = document.getElementById("phone");
+
+nameInput.addEventListener("input", () => {
+    nameInput.value = nameInput.value.replace(/[^a-zA-Zа-яА-Я\s]/g, "");
+});
+
+phoneInput.addEventListener("input", () => {
+    phoneInput.value = phoneInput.value.replace(/[^0-9+()-]/g, "");
+});
+
+// Отправка формы через Formspree
 document.getElementById("contact-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const message = document.getElementById("message").value;
+    const form = e.target;
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const message = document.getElementById("message").value.trim();
 
-    const telegramBotToken = "7637499905:AAG3sIzYYtuMsMmjDeqT4mhufMz9-BVGk-o";
-    const chatId = "5333876903";
-    const text = `Новая заявка:\nИмя: ${name}\nТелефон: ${phone}\nСообщение: ${message}\nБонус: 1 месяц сопровождения бесплатно`;
-    const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+    if (!name || !phone) {
+        alert("Пожалуйста, заполните имя и телефон.");
+        return;
+    }
 
     try {
-        console.log("Отправка заявки в Telegram...", { chatId, text });
-        const response = await fetch(`${proxyUrl}https://api.telegram.org/bot${telegramBotToken}/sendMessage`, {
+        console.log("Отправка заявки на почту...", { name, phone, message });
+        const response = await fetch(form.action, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
             body: JSON.stringify({
-                chat_id: chatId,
-                text: text,
-            }),
+                name: name,
+                phone: phone,
+                message: message,
+                bonus: "1 месяц сопровождения бесплатно"
+            })
         });
         if (response.ok) {
-            console.log("Заявка отправлена в Telegram!");
+            console.log("Заявка отправлена на почту!");
             alert("Заявка отправлена! Скоро свяжемся.");
-            e.target.reset();
+            form.reset();
         } else {
             const errorData = await response.json();
-            console.error("Ошибка отправки в Telegram:", errorData);
-            throw new Error(`Ошибка: ${errorData.description}`);
+            console.error("Ошибка:", errorData);
+            throw new Error(`Ошибка: ${errorData.error || response.statusText}`);
         }
     } catch (error) {
         console.error("Ошибка:", error.message);
-        alert("Ошибка отправки. Проверьте подключение или попробуйте позже.");
+        alert("Ошибка отправки. Попробуйте позже.");
     }
 });
