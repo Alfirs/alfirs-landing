@@ -50,6 +50,14 @@ h2 {
     text-shadow: 0 0 8px rgba(169, 69, 255, 0.5);
 }
 
+h3 {
+    text-align: center;
+    font-size: 1.8rem;
+    font-family: 'Exo 2', sans-serif;
+    margin: 1rem 0;
+    color: #00cc99;
+}
+
 /* Glitch-эффект для h1 в .hero */
 .glitch {
     position: relative;
@@ -107,11 +115,17 @@ h2 {
     font-weight: 600;
     border-radius: 8px;
     transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
 }
 
 .cta-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(169, 69, 255, 0.7);
+}
+
+.cta-btn.big {
+    padding: 20px 40px;
+    font-size: 1.2rem;
 }
 
 /* Навигация */
@@ -248,6 +262,45 @@ h2 {
     100% { transform: translateY(100%); }
 }
 
+/* Проблемы */
+.problems {
+    padding: 60px 0;
+    background: rgba(20, 20, 20, 0.95);
+}
+
+.problem-list {
+    list-style: none;
+    padding: 20px 0;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #ff3333;
+}
+
+.problem-list li {
+    margin-bottom: 15px;
+}
+
+/* Выгоды */
+.benefits {
+    padding: 60px 0;
+}
+
+.benefit-list {
+    list-style: none;
+    padding: 20px 0;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #00cc99;
+}
+
+.benefit-list li {
+    margin-bottom: 15px;
+}
+
 /* Обо мне */
 .about-content {
     display: flex;
@@ -372,6 +425,33 @@ h2 {
     text-shadow: 0 0 8px rgba(169, 69, 255, 0.7);
 }
 
+/* Отзывы */
+.testimonials {
+    padding: 60px 0;
+    background: rgba(20, 20, 20, 0.95);
+}
+
+.testimonial {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: rgba(34, 34, 34, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(169, 69, 255, 0.5);
+}
+
+.testimonial p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.testimonial span {
+    display: block;
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #00cc99;
+}
+
 /* Оставить заявку */
 #apply {
     padding: 60px 0;
@@ -466,22 +546,16 @@ input:invalid, textarea:invalid {
     text-shadow: 0 0 8px rgba(0, 204, 153, 0.7);
 }
 
-.bot-holo {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 120px;
-    filter: drop-shadow(0 0 10px rgba(169, 69, 255, 0.5));
-    animation: float 3s ease-in-out infinite;
-    z-index: 1;
-}
-
 /* Футер */
 footer {
     text-align: center;
     padding: 25px;
     background: rgba(20, 20, 20, 0.95);
     color: #a945ff;
+}
+
+footer .cta-btn {
+    margin-top: 15px;
 }
 
 /* Адаптивность */
@@ -521,13 +595,14 @@ footer {
     .work-item {
         width: 90%;
     }
+    .problem-list, .benefit-list {
+        font-size: 1.1rem;
+    }
+    .testimonial {
+        padding: 15px;
+    }
     .contacts-list {
         gap: 10px;
-    }
-    .bot-holo {
-        width: 100px;
-        top: 10px;
-        right: 10px;
     }
 }
 
@@ -541,12 +616,13 @@ footer {
     .about-img {
         width: 200px;
     }
-    .contacts-list li {
+    .problem-list, .benefit-list {
         font-size: 1rem;
     }
-    .bot-holo {
-        width: 80px;
-        top: 5px;
-        right: 5px;
+    .testimonial p {
+        font-size: 1rem;
+    }
+    .contacts-list li {
+        font-size: 1rem;
     }
 }
