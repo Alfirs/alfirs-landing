@@ -99,7 +99,6 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
     formData.append("message", message);
     formData.append("bonus", "1 месяц сопровождения бесплатно");
 
-    // Данные для Make
     const payload = {
         name: name,
         phone: phone,
@@ -126,14 +125,23 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
 
         // 2. Отправка в Make
         console.log("Отправка в Make...");
-        const responseMake = await fetch('https://hook.eu2.make.com/8ohhohfkgltzg013vk8vpza1h4bl486w', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const responseMake = await fetch('https://hook.eu2.make.com/8ohhohfkgltzg013vk8vpza1h4bl486w', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-make-apikey': 'alfirs-2025'
+                },
+                body: JSON.stringify(payload)
+            });
 
-        if (!responseMake.ok) {
-            console.warn("Make: не удалось отправить данные. Проверь URL и Make сцену.");
+            if (responseMake.ok) {
+                console.log("✅ Make: данные успешно отправлены");
+            } else {
+                console.warn("❌ Make: ошибка ответа", responseMake.status, await responseMake.text());
+            }
+        } catch (err) {
+            console.warn("🚨 Make: ошибка сети", err.message);
         }
 
         // 3. Успех
