@@ -126,7 +126,7 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
 
         // 2. Отправка в Make
         console.log("Отправка в Make...");
-        const responseMake = await fetch('https://hook.eu1.make.com/ТВОЙ_MAKE_WEBHOOK_URL', {
+        const responseMake = await fetch('https://hook.eu2.make.com/43a79jktt3qflvic1jb99r9civpolsfp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
