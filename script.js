@@ -80,7 +80,7 @@ phoneInput.addEventListener("input", () => {
     phoneInput.value = phoneInput.value.replace(/[^0-9+()-]/g, "");
 });
 
-// Отправка формы через Formspree
+// Отправка формы: Formspree + Make
 document.getElementById("contact-form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -99,9 +99,19 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
     formData.append("message", message);
     formData.append("bonus", "1 месяц сопровождения бесплатно");
 
+    // Данные для Make
+    const payload = {
+        name: name,
+        phone: phone,
+        message: message,
+        bonus: "1 месяц сопровождения бесплатно",
+        source: "alfirs-landing"
+    };
+
     try {
-        console.log("Отправка заявки на почту...", { name, phone, message });
-        const response = await fetch(form.action, {
+        // 1. Отправка в Formspree
+        console.log("Отправка в Formspree...");
+        const responseFormspree = await fetch(form.action, {
             method: "POST",
             body: formData,
             headers: {
@@ -109,17 +119,30 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
             }
         });
 
-        if (response.ok) {
-            console.log("Заявка отправлена на почту!");
-            alert("Заявка отправлена! Скоро свяжемся.");
-            form.reset();
-        } else {
-            const errorText = await response.text();
-            console.error("Ошибка:", errorText);
-            throw new Error(`Ошибка ${response.status}: ${errorText}`);
+        if (!responseFormspree.ok) {
+            const errorText = await responseFormspree.text();
+            throw new Error(`Formspree error: ${responseFormspree.status} ${errorText}`);
         }
+
+        // 2. Отправка в Make
+        console.log("Отправка в Make...");
+        const responseMake = await fetch('https://hook.eu1.make.com/ТВОЙ_MAKE_WEBHOOK_URL', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!responseMake.ok) {
+            console.warn("Make: не удалось отправить данные. Проверь URL и Make сцену.");
+        }
+
+        // 3. Успех
+        console.log("✅ Заявка отправлена: Formspree + Make");
+        alert("Заявка отправлена! Скоро свяжемся.");
+        form.reset();
+
     } catch (error) {
-        console.error("Ошибка:", error.message);
-        alert("Ошибка отправки. Проверьте Formspree ID или попробуйте позже.");
+        console.error("Ошибка отправки:", error.message);
+        alert("Ошибка отправки. Проверьте соединение или попробуйте позже.");
     }
 });
