@@ -127,13 +127,12 @@ document.getElementById("contact-form").addEventListener("submit", async (e) => 
         console.log("Отправка в Make...");
         try {
             const responseMake = await fetch('https://hook.eu2.make.com/8ohhohfkgltzg013vk8vpza1h4bl486w', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-make-apikey': 'alfirs-2025'
-                },
-                body: JSON.stringify(payload)
-            });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
 
             if (responseMake.ok) {
                 console.log("✅ Make: данные успешно отправлены");
